@@ -1,28 +1,20 @@
 # silksong-save-analyzer-Chinese
 
-This template should help get you started developing with Vue 3 in Vite.
+这是一个用于分析 《空洞骑士：丝之歌》 存档的工具，目前支持查看存档中已解锁和未解锁的物品，方便玩家查缺补漏。
 
-## Recommended IDE Setup
-
-[VSCode](https://code.visualstudio.com/) + [Volar](https://marketplace.visualstudio.com/items?itemName=Vue.volar) (and disable Vetur).
-
-## Customize configuration
-
-See [Vite Configuration Reference](https://vite.dev/config/).
-
-## Project Setup
+## 环境设置
 
 ```sh
 npm install
 ```
 
-### Compile and Hot-Reload for Development
+### 启动开发服务器
 
 ```sh
 npm run dev
 ```
 
-### Compile and Minify for Production
+### 打包正式环境
 
 ```sh
 npm run build
