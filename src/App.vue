@@ -24,7 +24,7 @@
         </el-col>
       </el-row>
       <el-row>
-        <el-tabs tab-position="left" class="demo-tabs" style="width: 100%;">
+        <el-tabs v-model="activeName" tab-position="left" class="demo-tabs" style="width: 100%;">
           <el-tab-pane v-for="value, key in acts" :label="value" :name="key">
             <el-collapse style="width: 100%;">
               <el-collapse-item v-for="catgory, catgory_name in render_data[key]" :title="catgory.Chinese_name" :name="catgory_name">
@@ -57,6 +57,7 @@ const acts = {"act1": "第一幕", "act2": "第二幕", "act3": "第三幕"}
 
 const file_content = ref(null)
 const render_data = ref('')
+const activeName = ref('act1')
 const upload = ref()
 
 const handleChange = (file) => {
