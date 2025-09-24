@@ -3,7 +3,7 @@
 <template>
   <el-container>
     <el-header>
-      丝之歌存档解析器
+      丝之歌全收集查缺补漏
     </el-header>
     <el-main>
       <el-row>
@@ -29,9 +29,19 @@
         </el-upload>
       </el-row>
       <el-row>
-        <el-tabs tab-position="left" style="height: 200px" class="demo-tabs">
+        <el-tabs tab-position="left" class="demo-tabs" style="width: 100%;">
           <el-tab-pane v-for="value, key in acts" :label="value" :name="key">
-            {{ content }}
+            <el-collapse style="width: 100%;">
+              <el-collapse-item v-for="catgory, catgory_name in render_data[key]" :title="catgory.Chinese_name" :name="catgory_name">
+                {{ catgory.description }}
+                <el-table :data="catgory.items" border style="width: 100%" :row-class-name="tableRowClassName">
+                  <el-table-column prop="Chinese_name" label="名称" width="180" />
+                  <el-table-column prop="IsUnlocked" label="解锁状态" width="180"/>
+                  <el-table-column prop="prereqs" label="前置" />
+                  <el-table-column prop="location" label="获取地点" />
+                </el-table>
+              </el-collapse-item>
+            </el-collapse>
           </el-tab-pane>
         </el-tabs>
       </el-row>
@@ -45,12 +55,13 @@
 import { ref } from 'vue'
 import { genFileId, ElMessage } from 'element-plus'
 import { decryptSaveFile } from "@/utils/decrypter.js"
+import { render } from "@/utils/render.js"
 
 
 const acts = {"act1": "第一幕", "act2": "第二幕", "act3": "第三幕"}
 
 const file_content = ref(null)
-const content = ref('')
+const render_data = ref('')
 const upload = ref()
 
 const handleChange = (file) => {
@@ -70,10 +81,20 @@ const submitUpload = async () => {
     return
   }
 
-  try {
-    content.value = await decryptSaveFile(file_content.value)
-  } catch (e) {
-    ElMessage.error('解密失败：' + e.message)
+  const user_save = await decryptSaveFile(file_content.value)
+  render_data.value = render(user_save)
+  render_data.value['act1'] = render_data.value[1]
+  render_data.value['act2'] = render_data.value[2]
+  render_data.value['act3'] = render_data.value[3]
+  console.log("render_data: ", render_data)
+}
+
+const tableRowClassName = ({row, row_index}) => {
+  console.log("row: ", row)
+  if (row.IsUnlocked == "已解锁") {
+    return "unlocked-row";
+  } else {
+    return "locked-row";
   }
 }
 </script>
@@ -89,5 +110,12 @@ const submitUpload = async () => {
 .el-tabs--right .el-tabs__content,
 .el-tabs--left .el-tabs__content {
   height: 100%;
+}
+
+.el-table .unlocked-row {
+  --el-table-tr-bg-color: rgb(133, 206, 97);
+}
+.el-table .locked-row {
+  --el-table-tr-bg-color: rgb(247, 137, 137);
 }
 </style>
