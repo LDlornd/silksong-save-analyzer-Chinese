@@ -1,30 +1,27 @@
 <template>
   <el-container>
     <el-header>
-      丝之歌全收集查缺补漏
+      <h1>丝之歌全收集查缺补漏</h1>
     </el-header>
     <el-main>
-      <el-row>
-        <el-upload
-    ref="upload"
-          class="upload-demo"
-          :limit="1"
-          :on-change="handleChange"
-          :on-exceed="handleExceed"
-          :auto-upload="false"
-        >
-          <template #trigger>
-            <el-button type="primary">选择文件</el-button>
-          </template>
-          <el-button class="ml-3" type="success" @click="submitUpload">
-            upload to server
-          </el-button>
-          <template #tip>
-            <div class="el-upload__tip text-red">
-              limit 1 file, new file will cover the old file
-            </div>
-          </template>
-        </el-upload>
+      <el-row :gutter="20">
+        <el-col :span="5">
+          <el-upload
+            ref="upload"
+            class="upload-demo"
+            :limit="1"
+            :on-change="handleChange"
+            :on-exceed="handleExceed"
+            :auto-upload="false"
+          >
+            <template #trigger >
+              <el-button type="primary">选择文件进行分析</el-button>
+            </template>
+          </el-upload>
+        </el-col>
+        <el-col :span="19">
+          请先选择存档，一般而言，对于 Windows 用户，存档文件位于 C:\Users\<你的用户名>\AppData\LocalLow\Team Cherry\Hollow Knight Silksong 文件夹下
+        </el-col>
       </el-row>
       <el-row>
         <el-tabs tab-position="left" class="demo-tabs" style="width: 100%;">
@@ -35,7 +32,7 @@
                 <el-table :data="catgory.items" border style="width: 100%" :row-class-name="tableRowClassName">
                   <el-table-column prop="Chinese_name" label="名称" width="180" />
                   <el-table-column prop="IsUnlocked" label="解锁状态" width="180"/>
-                  <el-table-column prop="prereqs" label="前置" />
+                  <el-table-column prop="prereqs" label="前置" width="360"/>
                   <el-table-column prop="location" label="获取地点" />
                 </el-table>
               </el-collapse-item>
@@ -64,6 +61,7 @@ const upload = ref()
 
 const handleChange = (file) => {
   file_content.value = file.raw
+  analyse()
 }
 
 const handleExceed = (files) => {
@@ -73,7 +71,7 @@ const handleExceed = (files) => {
   upload.value.hanleChange(file)
 }
 
-const submitUpload = async () => {
+const analyse = async () => {
   if (!file_content.value) {
     ElMessage.error('请选择文件。')
     return
